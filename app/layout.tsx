@@ -30,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`h-full ${inter.variable} ${calFont.variable} font-sans antialiased`}
+        className={`h-full ${inter.variable} ${calFont.variable} font-inter antialiased`}
       >
         <ClientWrapper>
           <Navbar />
