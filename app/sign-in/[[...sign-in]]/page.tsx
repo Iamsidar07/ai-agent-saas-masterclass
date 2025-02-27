@@ -11,7 +11,7 @@ export default function SignInPage() {
       <SquaresPattern />
       <div className='flex flex-col items-center'>
         <SignIn.Root>
-          <SignIn.Step name="start" className='flex flex-col items-center gap-4'>
+          <SignIn.Step name="start" className='flex flex-col items-center gap-4 px-4'>
             <h1 className='text-2xl sm:text-4xl'>Sign In</h1>
             <p className='text-lg font-normal font-cal text-muted-foreground'>Your personal AI Agent for content</p>
             <Clerk.Connection name="google" className={buttonVariants({ variant: 'default', size: 'lg', className: 'flex items-center gap-1.5 font-cal' })}>
