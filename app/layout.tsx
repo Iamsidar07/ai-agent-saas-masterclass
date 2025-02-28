@@ -5,6 +5,7 @@ import "./globals.css";
 import ClientWrapper from "@/components/ClientWrapper";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "sonner";
+import NextTopLoader from 'nextjs-toploader';
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,6 +42,16 @@ export default function RootLayout({
             expand
             position="bottom-right"
             richColors
+          />
+          <NextTopLoader
+            color="#FF0000"
+            initialPosition={0.08}
+            crawlSpeed={200}
+            height={3}
+            // crawl={true}
+            easing="ease"
+            speed={200}
+            showSpinner={false}
           />
         </ClientWrapper>
       </body>

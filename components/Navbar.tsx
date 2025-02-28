@@ -3,7 +3,6 @@ import Link from 'next/link'
 import React from 'react'
 import {
     SignInButton,
-    SignUpButton,
     SignedIn,
     SignedOut,
     UserButton,
@@ -28,9 +27,6 @@ const Navbar = () => {
                         <SignInButton >
                             <Link href="/sign-in" className={buttonVariants({ variant: "outline" })}>Sign in</Link>
                         </SignInButton>
-                        <SignUpButton >
-                            <Link href="/sign-in" className={buttonVariants({ variant: "ghost" })}>Sign up</Link>
-                        </SignUpButton>
                     </SignedOut>
                     <SignedIn>
                         <Link href={'/video'} className={buttonVariants({
