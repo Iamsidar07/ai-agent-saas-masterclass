@@ -1,8 +1,8 @@
 "use client"
-import { ClerkProvider } from '@clerk/nextjs'
 import { SchematicProvider } from '@schematichq/schematic-react'
 import React, { ReactNode } from 'react'
 import SchematicWrapper from './SchematicWrapper'
+import ConvexClientProvider from './ConvexClientProvider'
 
 const ClientWrapper = ({ children }: Readonly<{ children: ReactNode }>) => {
 
@@ -13,13 +13,13 @@ const ClientWrapper = ({ children }: Readonly<{ children: ReactNode }>) => {
     }
 
     return (
-        <ClerkProvider>
+        <ConvexClientProvider>
             <SchematicProvider publishableKey={publishableKey}>
                 <SchematicWrapper>
                     {children}
                 </SchematicWrapper>
             </SchematicProvider>
-        </ClerkProvider>
+        </ConvexClientProvider>
     )
 }
 

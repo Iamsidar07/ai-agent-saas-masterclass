@@ -4,6 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import ClientWrapper from "@/components/ClientWrapper";
 import Navbar from "@/components/Navbar";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -35,6 +36,12 @@ export default function RootLayout({
         <ClientWrapper>
           <Navbar />
           {children}
+          <Toaster
+            closeButton
+            expand
+            position="bottom-right"
+            richColors
+          />
         </ClientWrapper>
       </body>
     </html>

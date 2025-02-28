@@ -33,6 +33,9 @@ const Navbar = () => {
                         </SignUpButton>
                     </SignedOut>
                     <SignedIn>
+                        <Link href={'/video'} className={buttonVariants({
+                            variant: "ghost"
+                        })}>My videos</Link>
                         <Link href={'/manage-plan'} className={buttonVariants({
                             variant: "ghost"
                         })}>Manage Plan</Link>

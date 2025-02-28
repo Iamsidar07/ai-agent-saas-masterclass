@@ -4,6 +4,10 @@ export enum FeatureFlag {
   TITLE_GENERATION = "title-generation",
   THUMBNAIL_GENERATION = "thumbnail-generation",
   SCRIPT_GENERATION = "script-generation",
+  SENTIMENT_ANALYSIS = "sentiment-analysis-of-comments",
+  GENERATE_TAGS = "generate-tags",
+  GENERATE_DESCRIPTION = "generate-description",
+  GENERATE_HOOKS="video-hook-generation"
 }
 
 export const featureFlagEvents: Record<FeatureFlag, { event: string }> = {
@@ -19,7 +23,19 @@ export const featureFlagEvents: Record<FeatureFlag, { event: string }> = {
   [FeatureFlag.SCRIPT_GENERATION]: {
     event: "generate-script",
   },
-  [FeatureFlag.TRANSCRIPTION]: {
-    event: "",
+  [FeatureFlag.SENTIMENT_ANALYSIS]: {
+    event: "sentiment-analysis-of-comments",
   },
+  [FeatureFlag.TRANSCRIPTION]: {
+    event: "transcription",
+  },
+  [FeatureFlag.GENERATE_TAGS]: {
+    event: "generate-tags",
+  },
+  [FeatureFlag.GENERATE_DESCRIPTION]: {
+    event: "generate-description",
+  },
+  [FeatureFlag.GENERATE_HOOKS]: {
+    event: "generate-hook"
+  }
 };
