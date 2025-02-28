@@ -14,7 +14,7 @@ import AIAssistantAnimation from './AIAssistantAnimation'
 const Navbar = () => {
     return (
         <header className='sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 font-cal'>
-            <nav className='container mx-auto px-6 py-4 flex items-center justify-between'>
+            <nav className='container mx-auto px-6 py-4 md:px-0 flex items-center justify-between'>
                 <Link href={"/"} className='flex items-center gap-2'>
                     <AIAssistantAnimation
                         size='sm'

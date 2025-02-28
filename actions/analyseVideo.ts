@@ -7,5 +7,5 @@ export async function analyseVideo(formData: FormData) {
   const url = formData.get("url")?.toString();
   if (!url) return;
   const videoId = getVideoIdFromUrl(url);
-  redirect(`/video/${videoId}/analyse`);
+  redirect(`/video/${videoId}/analysis`);
 }

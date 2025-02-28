@@ -37,7 +37,7 @@ export default function StepsSection() {
             className="relative flex flex-col items-center w-full max-w-2xl text-center"
           >
             <div className="bg-white rounded-lg p-6">
-              <div className={cn("w-16 h-16 flex items-center justify-center rounded-full shadow-lg mx-auto", step.bg)}>
+              <div className={cn("w-16 h-16 flex items-center justify-center rounded-full shadow-[rgba(13,_38,_76,_0.19)_0px_9px_20px] mx-auto", step.bg)}>
                 <step.icon
                   className={`h-10 w-10`}
                 />
