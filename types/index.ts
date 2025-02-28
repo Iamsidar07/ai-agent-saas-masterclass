@@ -14,7 +14,7 @@ export type Video = {
   thumbnail: string;
   title: string;
   description: string;
-  views: string;
+  views: number;
   publishedAt: string;
   channelDetails: ChannelDetails;
   url: string;
