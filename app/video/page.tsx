@@ -1,15 +1,25 @@
-"use client"
+'use client'
 
+import dynamic from 'next/dynamic'
 import { useUser } from "@clerk/nextjs"
 import { useQuery } from "convex/react"
 import { api } from "@/convex/_generated/api"
 import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
-import YoutubeVideoForm from "@/components/YoutubeVideoForm"
 import { Skeleton } from "@/components/ui/skeleton"
-import emptyAnimationData from "@/animations/empty.json"
-import LottieAnimation from "@/components/LottieAnimation"
+import { Suspense } from 'react'
+
+// Dynamically import components that might use browser APIs
+const YoutubeVideoForm = dynamic(() => import('@/components/YoutubeVideoForm'), {
+    ssr: false,
+    loading: () => <Skeleton className="w-full h-12" />
+})
+
+const LottieAnimation = dynamic(() => import('@/components/LottieAnimation'), {
+    ssr: false,
+    loading: () => <Skeleton className="w-64 h-64" />
+})
 
 const formatNumber = (num: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -45,7 +55,9 @@ export default function MyVideosPage() {
                 <div className="flex items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold">My Videos</h1>
                     <div className="max-w-lg w-full">
-                        <YoutubeVideoForm />
+                        <Suspense fallback={<Skeleton className="w-full h-12" />}>
+                            <YoutubeVideoForm />
+                        </Suspense>
                     </div>
                 </div>
                 <div className="h-px bg-gray-200" />
@@ -63,7 +75,13 @@ export default function MyVideosPage() {
             {/* Empty State */}
             {videos && videos.length === 0 && (
                 <div className="flex flex-col items-center justify-center min-h-[40vh]">
-                    <LottieAnimation animationData={emptyAnimationData} className="w-64"   />
+                    <Suspense fallback={<Skeleton className="w-64 h-64" />}>
+                        <LottieAnimation 
+                            // eslint-disable-next-line @typescript-eslint/no-require-imports
+                            animationData={require('@/animations/empty.json')} 
+                            className="w-64" 
+                        />
+                    </Suspense>
                     <h1 className="text-2xl font-bold mb-4">No videos found</h1>
                     <p className="text-gray-600">Add a YouTube video URL to get started</p>
                 </div>
