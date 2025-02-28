@@ -22,13 +22,12 @@ const NotFound = () => {
       </Suspense>
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="max-w-md mx-auto">
-          <Suspense fallback={<div className="w-full h-64 animate-pulse bg-gray-200 rounded-lg mb-8" />}>
-            <LottieAnimation 
-              // eslint-disable-next-line @typescript-eslint/no-require-imports
-              animationData={require('@/animations/404.json')}
-              className="w-full h-64 mb-8"
+          <LottieAnimation
+            // eslint-disable-next-line @typescript-eslint/no-require-imports
+            animationData={require('@/animations/404.json')}
+            className="w-full"
             />
-          </Suspense>
+
           <h1 className="text-4xl font-cal font-bold mb-4">
             Page Not Found
           </h1>
@@ -36,7 +35,7 @@ const NotFound = () => {
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </p>
           <Link href="/">
-            <Button 
+            <Button
               size="lg"
               className="font-cal"
             >
