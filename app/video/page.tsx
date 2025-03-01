@@ -52,7 +52,7 @@ export default function MyVideosPage() {
         <div className="container mx-auto px-4 py-6">
             {/* Header Section */}
             <div className="mb-8">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                     <h1 className="text-2xl font-bold">My Videos</h1>
                     <div className="max-w-lg w-full">
                         <Suspense fallback={<Skeleton className="w-full h-12" />}>

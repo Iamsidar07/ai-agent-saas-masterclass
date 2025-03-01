@@ -1,12 +1,11 @@
 "use client"
 
 import { FeatureFlag } from "@/features/flags"
-import { useUser } from "@clerk/nextjs"
 import { useSchematicEntitlement } from "@schematichq/schematic-react"
-import { useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Usage from "./Usage"
-import { useQuery } from "convex/react"
-import { api } from "@/convex/_generated/api"
+import { toast } from "sonner"
+import { getTranscriptions } from "@/actions/getTranscriptions"
 
 interface TranscriptEntry {
     timestamp: string
@@ -14,17 +13,23 @@ interface TranscriptEntry {
 }
 
 const Transcription = ({ videoId }: { videoId: string }) => {
-    const { user } = useUser()
-    const transcriptions = useQuery(api.transcrptions.getTranscriptions, {
-        userId: user?.id || "",
-        videoId
-    })
     const [transcript, setTranscript] = useState<{
         transcript: TranscriptEntry[],
         cache: string
     } | null>(null)
     const { featureUsageExceeded } = useSchematicEntitlement(FeatureFlag.TRANSCRIPTION)
-    console.log(transcriptions, setTranscript)
+
+    const handleGenerateTranscription = useCallback(async (videoId: string) => {
+        if (featureUsageExceeded) {
+            toast.error("Transcription limit exceeded");
+            return
+        }
+        const result = await getTranscriptions(videoId)
+        setTranscript(result)
+    }, [featureUsageExceeded])
+
+    useEffect(() => { handleGenerateTranscription(videoId) }, [handleGenerateTranscription, videoId])
+
 
 
     return (
@@ -38,7 +43,7 @@ const Transcription = ({ videoId }: { videoId: string }) => {
                 !featureUsageExceeded ? <div className="flex flex-col gap-2 max-h-[250px] overflow-y-auto rounded-md p-4 bg-gray-50">
                     {
                         transcript ? (
-                            transcript.transcript.map((entry, index) => (<div key={index} className="flex gap-2">
+                            transcript.transcript?.map((entry, index) => (<div key={index} className="flex gap-2 px-2">
                                 <span className="text-muted-foreground text-sm min-w-[50px]">{entry.timestamp}</span>
                                 <p className="text-sm">{entry.text}</p>
                             </div>))

@@ -10,9 +10,9 @@ import Image from "next/image"
 import Link from "next/link"
 import { format } from "date-fns"
 import { useUser } from "@clerk/nextjs"
-import { useMutation } from "convex/react"
-import { api } from "@/convex/_generated/api"
+
 import { toast } from "sonner"
+import { getTranscriptions } from "@/actions/getTranscriptions"
 
 const formatNumber = (num: string | number) => {
   const n = typeof num === 'string' ? parseInt(num) : num
@@ -33,7 +33,6 @@ const YoutubeVideoDetails = ({ id }: { id: string }) => {
   const { user } = useUser()
   const [video, setVideo] = useState<Video | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const createVideo = useMutation(api.videos.createVideo)
 
   useEffect(() => {
     const fetchVideoDetails = async () => {
@@ -41,31 +40,8 @@ const YoutubeVideoDetails = ({ id }: { id: string }) => {
       try {
         const videoDetails = await getVideoDetails(id)
         setVideo(videoDetails)
-        
-        // Create video in database if we have both video details and a user
-        if (videoDetails && user?.id) {
-          await createVideo({
-            userId: user.id,
-            videoId: id,
-            title: videoDetails.title,
-            description: videoDetails.description,
-            thumbnail: videoDetails.thumbnail,
-            views: parseInt(videoDetails.views.toString()),
-            publishedAt: videoDetails.publishedAt,
-            author: {
-              subscribersCount: parseInt(videoDetails.channelDetails.subscribersCount.toString()),
-              channelName: videoDetails.channelDetails.channelName,
-              avatar: videoDetails.channelDetails.avatar,
-              channel_url: videoDetails.channelDetails.channel_url,
-              username: videoDetails.channelDetails.username,
-              user_url: videoDetails.channelDetails.user_url,
-              isVerified: videoDetails.channelDetails.isVerified,
-              keywords: videoDetails.channelDetails.keywords || [],
-              category: videoDetails.channelDetails.category,
-              lengthSeconds: videoDetails.channelDetails.lengthSeconds,
-            },
-          });
-        }
+        await getTranscriptions(id)
+
       } catch (error) {
         console.error(error)
         toast.error("Failed to add video")
@@ -74,7 +50,7 @@ const YoutubeVideoDetails = ({ id }: { id: string }) => {
       }
     }
     fetchVideoDetails()
-  }, [id, user?.id, createVideo])
+  }, [id, user?.id ])
 
   if (isLoading) {
     return (

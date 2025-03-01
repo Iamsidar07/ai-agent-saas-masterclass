@@ -13,7 +13,7 @@ export const getVideoById = query({
       .filter((q) => q.eq(q.field("userId"), args.userId))
       .filter((q) => q.eq(q.field("videoId"), args.videoId))
       .collect();
-    return videos;
+    return videos[0];
   },
 });
 
@@ -31,7 +31,7 @@ export const getVideos = query({
   },
 });
 
-export const createVideo = mutation({
+export const createOrGetVideo = mutation({
   args: {
     userId: v.string(),
     videoId: v.string(),
@@ -61,7 +61,7 @@ export const createVideo = mutation({
       .filter((q) => q.eq(q.field("videoId"), args.videoId))
       .collect();
 
-    if (isVideoExist.length) return isVideoExist;
+    if (isVideoExist.length) return isVideoExist[0]._id;
     const video = await ctx.db.insert("videos", args);
     return video;
   },
