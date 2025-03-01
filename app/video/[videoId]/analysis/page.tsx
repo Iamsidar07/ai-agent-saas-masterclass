@@ -38,7 +38,7 @@ export default function AnalysePage() {
 
     const VideoTranscriptionStatus = video === undefined ? <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-full">
         <div className="w-2 h-2 bg-gray-100 rounded-full animate-pulse" />
-        <span>Loading...</span>
+        <span className="w-32 h-4 bg-gray-100 animate-pulse"></span>
     </div> : !video ? <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-amber-50 border border-amber-200 rounded-full">
 
         <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
