@@ -1,8 +1,6 @@
 "use client";
-import { useChat, Message, useCompletion } from "@ai-sdk/react";
+import { useChat, Message } from "@ai-sdk/react";
 import AIAssistantAnimation from "./AIAssistantAnimation";
-import LottieAnimation from "./LottieAnimation";
-import animationData from "@/animations/empty.json";
 import { Button } from "./ui/button";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";

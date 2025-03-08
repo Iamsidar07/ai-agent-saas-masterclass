@@ -12,10 +12,11 @@ const LottieAnimation = ({
   className?: string;
 }) => {
   const [hasMounted, setHasMouned] = useState(false);
-  if (!hasMounted) return null;
   useEffect(() => {
     setHasMouned(true);
   }, []);
+
+  if (!hasMounted) return null;
   return (
     <Suspense
       fallback={
