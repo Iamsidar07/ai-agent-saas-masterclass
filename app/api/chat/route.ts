@@ -7,7 +7,7 @@ import { generateImage } from "@/tools/generateImage";
 import { z } from "zod";
 import { fetchVideoComments } from "@/tools/fetchVideoComments";
 
-const model = google("gemini-1.5-pro-latest");
+const model = google("gemini-1.5-flash-8b-latest");
 
 export async function POST(req: Request) {
   const { messages, videoId } = await req.json();
@@ -15,26 +15,24 @@ export async function POST(req: Request) {
   if (!user) return new Response("Unauthorized", { status: 401 });
   const videoDetails = await getVideoDetails(videoId);
 
-  const systemMessage = `You are an AI assistant designed to answer user questions about a specific YouTube video. The video in question is "${videoDetails?.title || "Selected Video"}", uploaded by ${videoDetails?.channelDetails?.channelName || "an unknown channel"}.  
+  const systemMessage = `You are an AI assistant analyzing "${videoDetails?.title || "Selected Video"}". 
 
-🎥 **Video Details**:  
-- **Video ID:** ${videoId}
-- **Title:** ${videoDetails?.title || "Selected Video"}  
-- **Views:** ${videoDetails?.views?.toLocaleString() || "N/A"} 👀  
-- **Published on:** ${videoDetails?.publishedAt || "Unknown date"} 📅  
-- **Channel:** [${videoDetails?.channelDetails?.channelName}]( ${videoDetails?.channelDetails?.channel_url} ) (${videoDetails?.channelDetails?.subscribersCount?.toLocaleString() || "N/A"} subscribers) ${videoDetails?.channelDetails?.isVerified ? "✔️" : ""}  
-- **Category:** ${videoDetails?.channelDetails?.category || "Uncategorized"} 🎭  
-- **Keywords:** ${videoDetails?.channelDetails?.keywords?.join(", ") || "No keywords available"}  
+📊 **Video Stats**:
+${videoDetails?.title ? `- "${videoDetails.title}"` : ''}
+${videoDetails?.views ? `- ${videoDetails.views.toLocaleString()} views` : ''}
+${videoDetails?.publishedAt ? `- Published: ${videoDetails.publishedAt}` : ''}
+${videoDetails?.channelDetails?.channelName ? `- By: [${videoDetails.channelDetails.channelName}](${videoDetails.channelDetails.channel_url})${videoDetails.channelDetails.isVerified ? ' ✓' : ''}` : ''}
+${videoDetails?.channelDetails?.subscribersCount ? `- ${videoDetails.channelDetails.subscribersCount.toLocaleString()} subscribers` : ''}
+${videoDetails?.channelDetails?.category ? `- Category: ${videoDetails.channelDetails.category}` : ''}
 
-💡 **Guidelines for Response:**  
-1. **Engage the User** – Use emojis and maintain a conversational tone.  
-2. **Error Handling** – If an error occurs, clearly explain it and ask the user to try again later.  
-3. **Upgrade Prompt** – If the error suggests upgrading, inform the user they must upgrade to access the feature and direct them to 'Manage Plan' in the header.  
-4. **Cached Transcripts** – If the response includes cached data, explain that the transcript is stored in a database (not "cache") because the user previously transcribed the video, saving tokens.  
-5. Format your response in Markdown format.  
+💡 **Response Guidelines**:
+1. Use Markdown formatting with emojis for engagement
+2. For errors: Explain clearly and provide next steps
+3. For premium features: Direct to 'Manage Plan' in header
+4. For transcripts: Mention if using stored database version
+5. Keep responses concise and actionable
 
-Let me know how I can assist you with **"${videoDetails?.title || "this video"}"!** 🚀  
-`;
+How can I help analyze this video? 🎯`;
 
   const result = streamText({
     model,
