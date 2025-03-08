@@ -4,6 +4,8 @@ import AIAssistantAnimation from "./AIAssistantAnimation";
 import { Button } from "./ui/button";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import LottieAnimation from "./LottieAnimation";
+import animationData from "@/animations/empty.json";
 import ReactMarkdown from "react-markdown";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSchematicEntitlement } from "@schematichq/schematic-react";
@@ -166,6 +168,20 @@ const AIAgentChat = ({ videoId }: { videoId: string }) => {
       </div>
       <div className="flex-1 overflow-y-auto p-4 scroll-smooth messages-container custom-scrollbar">
         <div className="space-y-6">
+          {messages?.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-full min-h-[250px] animate-fade-in">
+              <div className="text-center space-y-2">
+                <LottieAnimation
+                  animationData={animationData}
+                  className="w-32 mx-auto"
+                />
+                <h3>Welcome to your AI Agent</h3>
+                <p className="text-sm text-muted-foreground">
+                  Ask any question about your content strategy
+                </p>
+              </div>
+            </div>
+          )}
           {messages?.map((message, index) => (
             <div
               key={message.id}
@@ -195,7 +211,12 @@ const AIAgentChat = ({ videoId }: { videoId: string }) => {
                     : "bg-[#f1f1f1] text-gray-900 rounded-bl-md"
                 }`}
               >
-                <div className={cn("", message.role==="user" && "text-primary-foreground")}>
+                <div
+                  className={cn(
+                    "prose-lg",
+                    message.role === "user" && "text-primary-foreground"
+                  )}
+                >
                   <ReactMarkdown>{message.content}</ReactMarkdown>
                 </div>
               </div>
