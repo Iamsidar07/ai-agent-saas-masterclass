@@ -17,9 +17,11 @@ import {
   Tags,
   Sparkles,
   ImageIcon,
+  Copy,
 } from "lucide-react";
 import { Skeleton } from "./ui/skeleton";
 import { cn } from "@/lib/utils";
+import { copyToClipboard } from "./DescriptionGeneration";
 
 const AIAgentChat = ({ videoId }: { videoId: string }) => {
   const { user } = useUser();
@@ -163,8 +165,8 @@ const AIAgentChat = ({ videoId }: { videoId: string }) => {
   return (
     <div ref={containerRef} className="flex flex-col h-full relative">
       <div className="hidden xl:flex items-center gap-2 mb-4 px-4 py-3 border-b border-gray-200">
-        <AIAssistantAnimation size="sm" />
-        <h2>AI Agent</h2>
+        {/* <AIAssistantAnimation size="sm" /> */}
+        <h2><span className="text-2xl">🫣 </span>Your Cohost@</h2>
       </div>
       <div className="flex-1 overflow-y-auto p-4 scroll-smooth messages-container custom-scrollbar">
         <div className="space-y-6">
@@ -183,51 +185,62 @@ const AIAgentChat = ({ videoId }: { videoId: string }) => {
             </div>
           )}
           {messages?.map((message, index) => (
-            <div
-              key={message.id}
-              className={`flex items-end gap-2 message-animation ${
-                message.role === "user" ? "justify-end" : "justify-start"
-              } ${
-                index > 0 && messages[index - 1].role === message.role
-                  ? "mt-1"
-                  : "mt-6"
-              }`}
-              style={{
-                animationDelay: `${index * 0.1}s`,
-              }}
-            >
-              {message.role === "assistant" && (
-                <div className="animate-fade-in">
-                  <AIAssistantAnimation
-                    size="sm"
-                    className="mb-1 flex-shrink-0"
-                  />
-                </div>
-              )}
+            <div key={message.id}>
               <div
-                className={`relative max-w-[80%] px-4 py-2.5 rounded-[1.3rem] message-bubble ${
-                  message.role === "user"
-                    ? "bg-primary rounded-br-md message-bubble-user"
-                    : "bg-[#f1f1f1] text-gray-900 rounded-bl-md"
+                className={`flex items-end gap-2 message-animation ${
+                  message.role === "user" ? "justify-end" : "justify-start"
+                } ${
+                  index > 0 && messages[index - 1].role === message.role
+                    ? "mt-1"
+                    : "mt-6"
                 }`}
+                style={{
+                  animationDelay: `${index * 0.1}s`,
+                }}
               >
+                {message.role === "assistant" && (
+                  <div className="animate-fade-in">
+                    <AIAssistantAnimation
+                      size="sm"
+                      className="mb-1 flex-shrink-0"
+                    />
+                  </div>
+                )}
                 <div
-                  className={cn(
-                    "prose-lg",
-                    message.role === "user" && "text-primary-foreground"
-                  )}
+                  className={`relative max-w-[80%] px-4 py-2.5 rounded-[1.3rem] message-bubble ${
+                    message.role === "user"
+                      ? "bg-primary rounded-br-md message-bubble-user"
+                      : "bg-[#f1f1f1] text-gray-900 rounded-bl-md"
+                  }`}
                 >
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
+                  <div
+                    className={cn(
+                      "prose",
+                      message.role === "user" && "text-primary-foreground"
+                    )}
+                  >
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                 </div>
+
+                {message.role === "user" && (
+                  <div className="w-6 h-6 rounded-full bg-zinc-800 flex-shrink-0 mb-1 relative overflow-hidden animate-fade-in">
+                    <Image
+                      src={user?.imageUrl || "/avatar.png"}
+                      alt={user?.fullName || "User"}
+                      fill
+                    />
+                  </div>
+                )}
               </div>
-              {message.role === "user" && (
-                <div className="w-6 h-6 rounded-full bg-zinc-800 flex-shrink-0 mb-1 relative overflow-hidden animate-fade-in">
-                  <Image
-                    src={user?.imageUrl || "/avatar.png"}
-                    alt={user?.fullName || "User"}
-                    fill
-                  />
-                </div>
+              {message.role === "assistant" && (
+                <button
+                  onClick={() => copyToClipboard(message.content)}
+                  className="flex w-fit mt-2 ml-12 items-center gap-2 text-xs cursor-pointer transition-colors bg-muted hover:bg-gray-200 rounded-md px-4 py-2"
+                >
+                  <Copy className="w-4 h-4 text-gray-400" />
+                  copy to clipboard
+                </button>
               )}
             </div>
           ))}

@@ -15,6 +15,7 @@ export async function POST(req: Request) {
   const transcription = await getTranscriptions(videoId);
 
   const contextPrompt = `Analyze this video:
+Video is uploaded by ${videoDetails?.channelDetails.channelName}
 📊 Video Details:
 ${videoDetails?.title ? `- Title: "${videoDetails.title}"` : ""}
 ${videoDetails?.views ? `- Views: ${videoDetails.views.toLocaleString()}` : ""}
@@ -26,9 +27,7 @@ ${
 }
 
 📝 Transcript:
-${transcription.transcript
-  .map((t) => `[${t.timestamp}] ${t.text}`)
-  .join("\n")}
+${transcription.transcript.map((t) => `[${t.timestamp}] ${t.text}`).join("\n")}
 
 Based on this video content, ${prompt}`;
 
@@ -36,23 +35,28 @@ Based on this video content, ${prompt}`;
     model,
     prompt: contextPrompt,
     schema: z.object({
-      suggestions: z.array(
-        z.object({
-          suggestion: z
-            .string()
-            .describe(
-              "A suggested question to ask based on the video transcript"
-            ),
-          reason: z
-            .string()
-            .describe(
-              "The reason why this suggestion is relevant to the video transcript"
-            ),
-        })
-      ).min(5).describe('A list of 5 suggested questions to ask based on the video transcript'),
+      suggestions: z
+        .array(
+          z.object({
+            suggestion: z
+              .string()
+              .describe(
+                "A suggested question to ask based on the video transcript"
+              ),
+            reason: z
+              .string()
+              .describe(
+                "The reason why this suggestion is relevant to the video transcript"
+              ),
+          })
+        )
+        .min(5)
+        .describe(
+          "A list of 5 suggested questions to ask based on the video transcript"
+        ),
     }),
   });
-  console.log('/api/completion', result.object);
+  console.log("/api/completion", result.object);
 
   return NextResponse.json(result.object);
 }
